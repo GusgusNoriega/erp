@@ -6,7 +6,7 @@ $pageTitle = $pageTitle ?? 'Iniciar sesion';
 <html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?></title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,4 +21,3 @@ $pageTitle = $pageTitle ?? 'Iniciar sesion';
   <script src="<?= htmlspecialchars(url('/app.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>
-

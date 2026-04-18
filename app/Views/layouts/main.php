@@ -19,7 +19,7 @@ if (($currentUser['role'] ?? '') === 'admin') {
 <html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?></title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -84,7 +84,7 @@ if (($currentUser['role'] ?? '') === 'admin') {
             <input
               id="globalSearch"
               type="search"
-              placeholder="Buscar cliente, orden o factura"
+              placeholder="Buscar en la vista"
               autocomplete="off"
             />
           </label>

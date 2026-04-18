@@ -199,23 +199,23 @@ $formatTime = static function (string|null $time): string {
             $isIncomplete = $punchCount < 2 || $punchCount % 2 !== 0;
           ?>
           <tr>
-            <td class="number-cell"><?= htmlspecialchars((string) $row['work_date'], ENT_QUOTES, 'UTF-8') ?></td>
-            <td>
+            <td class="number-cell" data-label="Fecha"><?= htmlspecialchars((string) $row['work_date'], ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Empleado">
               <strong><?= htmlspecialchars((string) $row['display_name'], ENT_QUOTES, 'UTF-8') ?></strong>
               <span class="muted-cell"><?= htmlspecialchars((string) $row['external_code'], ENT_QUOTES, 'UTF-8') ?></span>
             </td>
-            <td><?= htmlspecialchars((string) $row['department_name'], ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatTime($row['first_punch'] ?? null), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatTime($row['last_punch'] ?? null), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= $punchCount ?></td>
-            <td>
+            <td data-label="Departamento"><?= htmlspecialchars((string) $row['department_name'], ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Primera"><?= htmlspecialchars($formatTime($row['first_punch'] ?? null), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Ultima"><?= htmlspecialchars($formatTime($row['last_punch'] ?? null), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Cantidad"><?= $punchCount ?></td>
+            <td data-label="Marcaciones">
               <div class="punch-list">
                 <?php foreach ($punches as $punch): ?>
                   <span class="punch-chip"><?= htmlspecialchars($punch, ENT_QUOTES, 'UTF-8') ?></span>
                 <?php endforeach; ?>
               </div>
             </td>
-            <td>
+            <td data-label="Estado">
               <?php if ($isIncomplete): ?>
                 <span class="stat-pill alert">Revisar</span>
               <?php elseif ($duplicateCount > 0): ?>
@@ -224,11 +224,10 @@ $formatTime = static function (string|null $time): string {
                 <span class="stat-pill ok">Completo</span>
               <?php endif; ?>
             </td>
-            <td><?= htmlspecialchars((string) ($row['source_filename'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Archivo"><?= htmlspecialchars((string) ($row['source_filename'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
   </div>
 </section>
-

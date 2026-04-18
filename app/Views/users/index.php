@@ -108,32 +108,32 @@ $success = $success ?? null;
         <?php foreach ($users as $user): ?>
           <?php $isCurrent = (int) $user['id'] === \App\Core\Auth::id(); ?>
           <tr>
-            <td>
+            <td data-label="Usuario">
               <strong><?= htmlspecialchars((string) $user['name'], ENT_QUOTES, 'UTF-8') ?></strong>
               <?php if ($isCurrent): ?>
                 <span class="muted-cell">Sesion actual</span>
               <?php endif; ?>
             </td>
-            <td><?= htmlspecialchars((string) $user['email'], ENT_QUOTES, 'UTF-8') ?></td>
-            <td>
+            <td data-label="Correo"><?= htmlspecialchars((string) $user['email'], ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Rol">
               <span class="stat-pill <?= ($user['role'] ?? '') === 'admin' ? 'ok' : 'warn' ?>">
                 <?= htmlspecialchars((string) $user['role'], ENT_QUOTES, 'UTF-8') ?>
               </span>
             </td>
-            <td>
+            <td data-label="Estado">
               <span class="stat-pill <?= (int) $user['active'] === 1 ? 'ok' : 'alert' ?>">
                 <?= (int) $user['active'] === 1 ? 'Activo' : 'Inactivo' ?>
               </span>
             </td>
-            <td><?= htmlspecialchars((string) ($user['last_login_at'] ?? '-'), ENT_QUOTES, 'UTF-8') ?></td>
-            <td>
+            <td data-label="Ultimo acceso"><?= htmlspecialchars((string) ($user['last_login_at'] ?? '-'), ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Cambiar contrasena">
               <form class="inline-user-form" method="post" action="<?= htmlspecialchars(url('/usuarios/password'), ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="user_id" value="<?= (int) $user['id'] ?>" />
                 <input type="password" name="password" minlength="6" placeholder="Nueva contrasena" required />
                 <button class="ghost-btn" type="submit">Guardar</button>
               </form>
             </td>
-            <td>
+            <td data-label="Acceso">
               <?php if (!$isCurrent): ?>
                 <form method="post" action="<?= htmlspecialchars(url('/usuarios/status'), ENT_QUOTES, 'UTF-8') ?>">
                   <input type="hidden" name="user_id" value="<?= (int) $user['id'] ?>" />
@@ -152,4 +152,3 @@ $success = $success ?? null;
     </table>
   </div>
 </section>
-

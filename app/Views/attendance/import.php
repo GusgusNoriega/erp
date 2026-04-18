@@ -153,26 +153,25 @@ $formatSummary = static function (string|null $json, string $key): string {
 
         <?php foreach ($recentBatches as $batch): ?>
           <tr>
-            <td class="number-cell"><?= (int) $batch['id'] ?></td>
-            <td><?= htmlspecialchars((string) $batch['source_filename'], ENT_QUOTES, 'UTF-8') ?></td>
-            <td>
+            <td class="number-cell" data-label="ID"><?= (int) $batch['id'] ?></td>
+            <td data-label="Archivo"><?= htmlspecialchars((string) $batch['source_filename'], ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Periodo">
               <?= htmlspecialchars((string) $batch['period_start'], ENT_QUOTES, 'UTF-8') ?>
               a
               <?= htmlspecialchars((string) $batch['period_end'], ENT_QUOTES, 'UTF-8') ?>
             </td>
-            <td>
+            <td data-label="Estado">
               <span class="stat-pill <?= ($batch['status'] ?? '') === 'processed' ? 'ok' : 'warn' ?>">
                 <?= htmlspecialchars((string) $batch['status'], ENT_QUOTES, 'UTF-8') ?>
               </span>
             </td>
-            <td class="number-cell"><?= $formatSummary($batch['summary_json'] ?? null, 'schedules') ?></td>
-            <td class="number-cell"><?= $formatSummary($batch['summary_json'] ?? null, 'period_summaries') ?></td>
-            <td class="number-cell"><?= $formatSummary($batch['summary_json'] ?? null, 'punches') ?></td>
-            <td><?= htmlspecialchars((string) ($batch['processed_at'] ?? $batch['created_at']), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Turnos"><?= $formatSummary($batch['summary_json'] ?? null, 'schedules') ?></td>
+            <td class="number-cell" data-label="Resumenes"><?= $formatSummary($batch['summary_json'] ?? null, 'period_summaries') ?></td>
+            <td class="number-cell" data-label="Marcaciones"><?= $formatSummary($batch['summary_json'] ?? null, 'punches') ?></td>
+            <td data-label="Procesado"><?= htmlspecialchars((string) ($batch['processed_at'] ?? $batch['created_at']), ENT_QUOTES, 'UTF-8') ?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
   </div>
 </section>
-

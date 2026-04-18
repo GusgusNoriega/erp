@@ -183,36 +183,35 @@ $formatMoney = static function (float|string|null $amount): string {
             );
           ?>
           <tr>
-            <td>
+            <td data-label="Empleado">
               <strong><?= htmlspecialchars((string) $row['display_name'], ENT_QUOTES, 'UTF-8') ?></strong>
               <span class="muted-cell"><?= htmlspecialchars((string) $row['external_code'], ENT_QUOTES, 'UTF-8') ?></span>
             </td>
-            <td><?= htmlspecialchars((string) $row['department_name'], ENT_QUOTES, 'UTF-8') ?></td>
-            <td><?= htmlspecialchars($period, ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatMinutes($row['normal_work_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatMinutes($row['actual_work_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($attendance, ENT_QUOTES, 'UTF-8') ?></td>
-            <td>
+            <td data-label="Departamento"><?= htmlspecialchars((string) $row['department_name'], ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Periodo"><?= htmlspecialchars($period, ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="H. normal"><?= htmlspecialchars($formatMinutes($row['normal_work_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="H. real"><?= htmlspecialchars($formatMinutes($row['actual_work_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Asistencia"><?= htmlspecialchars($attendance, ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Retardos">
               <span class="stat-pill warn">
                 <?= (int) ($row['late_count'] ?? 0) ?> / <?= htmlspecialchars($formatMinutes($row['late_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?>
               </span>
             </td>
-            <td>
+            <td data-label="Salidas temprano">
               <span class="stat-pill warn">
                 <?= (int) ($row['early_leave_count'] ?? 0) ?> / <?= htmlspecialchars($formatMinutes($row['early_leave_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?>
               </span>
             </td>
-            <td class="number-cell"><?= htmlspecialchars($formatMinutes($row['extra_workday_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatMinutes($row['extra_holiday_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatDays($row['exit_days'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatDays($row['absence_days'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatDays($row['permission_days'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
-            <td class="number-cell"><?= htmlspecialchars($formatMoney($row['real_payment_amount'] ?? null), ENT_QUOTES, 'UTF-8') ?></td>
-            <td><?= htmlspecialchars((string) ($row['notes'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Extra laboral"><?= htmlspecialchars($formatMinutes($row['extra_workday_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Extra festivo"><?= htmlspecialchars($formatMinutes($row['extra_holiday_minutes'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Salida dias"><?= htmlspecialchars($formatDays($row['exit_days'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Falta dias"><?= htmlspecialchars($formatDays($row['absence_days'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Permiso dias"><?= htmlspecialchars($formatDays($row['permission_days'] ?? 0), ENT_QUOTES, 'UTF-8') ?></td>
+            <td class="number-cell" data-label="Pago real"><?= htmlspecialchars($formatMoney($row['real_payment_amount'] ?? null), ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Notas"><?= htmlspecialchars((string) ($row['notes'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
   </div>
 </section>
-
