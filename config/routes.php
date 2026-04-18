@@ -3,10 +3,16 @@
 use App\Controllers\AuthController;
 use App\Controllers\AttendanceController;
 use App\Controllers\UserController;
+use App\Core\Auth;
 use App\Core\Router;
 
 /** @var Router $router */
 $router->get('/', static function (): void {
+    if (!Auth::check()) {
+        header('Location: ' . url('/login'));
+        exit;
+    }
+
     header('Location: ' . url('/asistencia/importar'));
     exit;
 });

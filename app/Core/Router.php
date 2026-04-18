@@ -31,9 +31,10 @@ class Router
     public function dispatch(?string $requestUri = null, ?string $requestMethod = null): void
     {
         $method = strtoupper($requestMethod ?? ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+        $lookupMethod = $method === 'HEAD' ? 'GET' : $method;
         $path = $this->normalizePath($requestUri ?? ($_SERVER['REQUEST_URI'] ?? '/'));
 
-        $handler = $this->routes[$method][$path] ?? null;
+        $handler = $this->routes[$lookupMethod][$path] ?? null;
 
         if ($handler === null) {
             http_response_code(404);
@@ -66,7 +67,11 @@ class Router
 
         $path = '/' . trim($path, '/');
 
-        return $path === '//' ? '/' : $path;
+        if ($path === '//' || $path === '/index.php') {
+            return '/';
+        }
+
+        return $path;
     }
 
     /**
