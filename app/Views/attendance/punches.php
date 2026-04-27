@@ -41,6 +41,7 @@ $formatTime = static function (string|null $time): string {
 
     return substr($time, 0, 5);
 };
+$exportUrl = url('/asistencia/marcaciones/exportar') . '?' . http_build_query($filters);
 ?>
 
 <section class="headline-card">
@@ -164,7 +165,15 @@ $formatTime = static function (string|null $time): string {
       <p class="panel-kicker">Detalle</p>
       <h2>Marcaciones agrupadas por dia</h2>
     </div>
-    <span class="panel-chip">Datos de la hoja de asistencia</span>
+    <div class="panel-actions">
+      <span class="panel-chip">Datos de la hoja de asistencia</span>
+      <a
+        class="ghost-btn primary-action export-action"
+        href="<?= htmlspecialchars($exportUrl, ENT_QUOTES, 'UTF-8') ?>"
+        data-export-link
+        data-export-url="<?= htmlspecialchars($exportUrl, ENT_QUOTES, 'UTF-8') ?>"
+      >Descargar Excel</a>
+    </div>
   </div>
 
   <div class="table-wrap punches-table-wrap">
@@ -180,12 +189,13 @@ $formatTime = static function (string|null $time): string {
           <th>Marcaciones</th>
           <th>Estado</th>
           <th>Archivo</th>
+          <th>Accion</th>
         </tr>
       </thead>
       <tbody>
         <?php if ($punchRows === []): ?>
           <tr>
-            <td colspan="9" class="empty-state-cell">
+            <td colspan="10" class="empty-state-cell">
               No hay marcaciones cargadas para los filtros seleccionados. Cuando el importador procese la hoja `Reporte de Asistencia`, los eventos apareceran aqui.
             </td>
           </tr>
@@ -225,6 +235,13 @@ $formatTime = static function (string|null $time): string {
               <?php endif; ?>
             </td>
             <td data-label="Archivo"><?= htmlspecialchars((string) ($row['source_filename'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+            <td data-label="Accion">
+              <a class="ghost-link" href="<?= htmlspecialchars(url('/asistencia/manual') . '?' . http_build_query([
+                  'date_from' => (string) $row['work_date'],
+                  'date_to' => (string) $row['work_date'],
+                  'employee_id' => (string) $row['employee_id'],
+              ]), ENT_QUOTES, 'UTF-8') ?>">Editar</a>
+            </td>
           </tr>
         <?php endforeach; ?>
       </tbody>

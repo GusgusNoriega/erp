@@ -9,6 +9,7 @@ $menuItems = [
     ['label' => 'Reporte de Turnos', 'path' => '/asistencia/turnos'],
     ['label' => 'Reporte Estadistico', 'path' => '/asistencia/estadisticas'],
     ['label' => 'Reporte de Asistencia', 'path' => '/asistencia/marcaciones'],
+    ['label' => 'Edicion Manual', 'path' => '/asistencia/manual'],
 ];
 
 if (($currentUser['role'] ?? '') === 'admin') {

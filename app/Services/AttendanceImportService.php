@@ -270,6 +270,7 @@ class AttendanceImportService
             $name = $this->cellText($row, 1) ?: $externalCode;
             $departmentId = $this->upsertDepartment($this->cellText($row, 2) ?: 'Sin departamento');
             $employeeId = $this->upsertEmployee($externalCode, $name, $departmentId);
+            $this->updateEmployeeDepartmentForPeriod($employeeId, $departmentId, $period['start'], $period['end'], $batchId);
 
             foreach ($dates as $dateIndex => $date) {
                 $rawCode = $this->cellText($row, 3 + $dateIndex);
@@ -311,6 +312,7 @@ class AttendanceImportService
 
             $departmentId = $this->upsertDepartment($this->cellText($row, 2) ?: 'Sin departamento');
             $employeeId = $this->upsertEmployee($externalCode, $this->cellText($row, 1) ?: $externalCode, $departmentId);
+            $this->updateEmployeeDepartmentForPeriod($employeeId, $departmentId, $period['start'], $period['end'], $batchId);
             [$scheduledDays, $attendedDays] = $this->parseDayPair($this->cellText($row, 11));
 
             $statement = $this->db->prepare('
@@ -456,6 +458,7 @@ class AttendanceImportService
             $name = $this->cellText($row, 10) ?: $externalCode;
             $departmentId = $this->upsertDepartment($this->cellText($row, 21) ?: 'Sin departamento');
             $employeeId = $this->upsertEmployee($externalCode, $name, $departmentId);
+            $this->updateEmployeeDepartmentForPeriod($employeeId, $departmentId, $period['start'], $period['end'], $batchId);
             $eventRow = $sheet[$rowIndex + 1] ?? [];
 
             foreach ($dates as $dateIndex => $date) {
@@ -642,6 +645,26 @@ class AttendanceImportService
         ]);
 
         return (int) $this->db->lastInsertId();
+    }
+
+    private function updateEmployeeDepartmentForPeriod(int $employeeId, int $departmentId, string $periodStart, string $periodEnd, int $batchId): void
+    {
+        $statement = $this->db->prepare('
+            UPDATE attendance_daily_records
+            SET
+                department_id = :department_id,
+                last_import_batch_id = :batch_id,
+                updated_at = NOW()
+            WHERE employee_id = :employee_id
+                AND work_date BETWEEN :period_start AND :period_end
+        ');
+        $statement->execute([
+            'department_id' => $departmentId,
+            'batch_id' => $batchId,
+            'employee_id' => $employeeId,
+            'period_start' => $periodStart,
+            'period_end' => $periodEnd,
+        ]);
     }
 
     private function upsertShiftType(string $code): int
@@ -848,8 +871,9 @@ class AttendanceImportService
         ]);
     }
 
-    private function ensureDailyRecord(int $employeeId, int $departmentId, string $date, int $batchId): int
+    private function ensureDailyRecord(int $employeeId, ?int $departmentId, string $date, int $batchId): int
     {
+        $departmentId = $departmentId !== null && $departmentId > 0 ? $departmentId : null;
         $statement = $this->db->prepare('
             INSERT INTO attendance_daily_records (
                 employee_id,
@@ -868,7 +892,7 @@ class AttendanceImportService
             )
             ON DUPLICATE KEY UPDATE
                 id = LAST_INSERT_ID(id),
-                department_id = COALESCE(department_id, VALUES(department_id)),
+                department_id = COALESCE(VALUES(department_id), department_id),
                 last_import_batch_id = VALUES(last_import_batch_id),
                 updated_at = NOW()
         ');
@@ -916,16 +940,14 @@ class AttendanceImportService
             $workedMinutes += $this->minutesBetween($times[$i], $times[$i + 1]);
         }
 
-        $dailyRecordId = $this->ensureDailyRecord(
-            $employeeId,
-            (int) ($meta['department_id'] ?? $meta['current_department_id'] ?? 0),
-            $date,
-            $batchId
-        );
+        $departmentId = $meta['department_id'] ?? $meta['current_department_id'] ?? null;
+        $departmentId = $departmentId !== null ? (int) $departmentId : null;
+        $dailyRecordId = $this->ensureDailyRecord($employeeId, $departmentId, $date, $batchId);
 
         $update = $this->db->prepare('
             UPDATE attendance_daily_records
             SET
+                department_id = COALESCE(:department_id, department_id),
                 schedule_id = :schedule_id,
                 status = :status,
                 first_in = :first_in,
@@ -940,6 +962,7 @@ class AttendanceImportService
         ');
         $update->execute([
             'schedule_id' => $meta['schedule_id'] ?? null,
+            'department_id' => $departmentId !== null && $departmentId > 0 ? $departmentId : null,
             'status' => $status,
             'first_in' => $times[0] ?? null,
             'first_out' => $times[1] ?? null,

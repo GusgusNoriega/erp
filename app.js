@@ -7,6 +7,7 @@ const openSidebarBtn = document.getElementById("openSidebar");
 const closeSidebarBtn = document.getElementById("closeSidebar");
 const backdrop = document.getElementById("backdrop");
 const globalSearch = document.getElementById("globalSearch");
+const exportLink = document.querySelector("[data-export-link]");
 const moduleTriggers = document.querySelectorAll("[data-module-trigger]");
 const moduleLinks = document.querySelectorAll(".module-view-link");
 
@@ -121,6 +122,24 @@ function filterRows(term) {
   }
 }
 
+function updateExportLink(term) {
+  if (!exportLink) {
+    return;
+  }
+
+  const baseUrl = exportLink.dataset.exportUrl || exportLink.href;
+  const exportUrl = new URL(baseUrl, window.location.origin);
+  const normalizedTerm = term.trim();
+
+  if (normalizedTerm) {
+    exportUrl.searchParams.set("search", normalizedTerm);
+  } else {
+    exportUrl.searchParams.delete("search");
+  }
+
+  exportLink.href = exportUrl.toString();
+}
+
 function bindEvents() {
   if (themeToggle) {
     themeToggle.addEventListener("click", () => {
@@ -143,8 +162,12 @@ function bindEvents() {
 
   if (globalSearch) {
     globalSearch.addEventListener("input", (event) => {
-      filterRows(event.target.value || "");
+      const term = event.target.value || "";
+      filterRows(term);
+      updateExportLink(term);
     });
+
+    updateExportLink(globalSearch.value || "");
   }
 
   moduleLinks.forEach((link) => {

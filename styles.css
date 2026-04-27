@@ -578,6 +578,22 @@ html[data-theme="dark"] .theme-toggle-icon::after {
   overflow-wrap: anywhere;
 }
 
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.panel-actions .ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 .fake-chart {
   margin-top: 16px;
   display: grid;
@@ -829,7 +845,8 @@ th {
 }
 
 .statistics-table-wrap,
-.punches-table-wrap {
+.punches-table-wrap,
+.manual-table-wrap {
   border: 1px solid var(--border);
   border-radius: 8px;
   max-height: 64vh;
@@ -846,7 +863,11 @@ th {
 }
 
 .punches-table {
-  min-width: 1180px;
+  min-width: 1260px;
+}
+
+.manual-records-table {
+  min-width: 1520px;
 }
 
 .schedule-table th,
@@ -1170,6 +1191,10 @@ th {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.manual-filters {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
 .statistics-table td:first-child strong,
 .statistics-table td:first-child span {
   display: block;
@@ -1237,6 +1262,27 @@ th {
   font-size: 0.76rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
+}
+
+.compact-input {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.time-input {
+  min-width: 86px;
+  font-variant-numeric: tabular-nums;
+}
+
+.notes-input {
+  min-width: 180px;
 }
 
 .icon-btn {
@@ -1471,6 +1517,10 @@ body.sidebar-open .backdrop {
     align-items: stretch;
   }
 
+  .panel-actions {
+    justify-content: flex-start;
+  }
+
   .filters-grid {
     grid-template-columns: 1fr;
   }
@@ -1489,7 +1539,8 @@ body.sidebar-open .backdrop {
   }
 
   .statistics-table-wrap,
-  .punches-table-wrap {
+  .punches-table-wrap,
+  .manual-table-wrap {
     max-height: none;
     border: 0;
   }
@@ -1501,6 +1552,7 @@ body.sidebar-open .backdrop {
   .import-history-table,
   .statistics-table,
   .punches-table,
+  .manual-records-table,
   .users-table {
     min-width: 0;
     border-collapse: separate;
@@ -1510,6 +1562,7 @@ body.sidebar-open .backdrop {
   .import-history-table thead,
   .statistics-table thead,
   .punches-table thead,
+  .manual-records-table thead,
   .users-table thead {
     display: none;
   }
@@ -1517,6 +1570,7 @@ body.sidebar-open .backdrop {
   .import-history-table tbody,
   .statistics-table tbody,
   .punches-table tbody,
+  .manual-records-table tbody,
   .users-table tbody {
     display: grid;
     gap: 10px;
@@ -1525,6 +1579,7 @@ body.sidebar-open .backdrop {
   .import-history-table tr,
   .statistics-table tr,
   .punches-table tr,
+  .manual-records-table tr,
   .users-table tr {
     display: grid;
     gap: 8px;
@@ -1537,6 +1592,7 @@ body.sidebar-open .backdrop {
   .import-history-table td,
   .statistics-table td,
   .punches-table td,
+  .manual-records-table td,
   .users-table td {
     display: grid;
     grid-template-columns: minmax(96px, 38%) minmax(0, 1fr);
@@ -1552,6 +1608,7 @@ body.sidebar-open .backdrop {
   .import-history-table td::before,
   .statistics-table td::before,
   .punches-table td::before,
+  .manual-records-table td::before,
   .users-table td::before {
     content: attr(data-label);
     color: var(--muted);
@@ -1563,10 +1620,12 @@ body.sidebar-open .backdrop {
   .import-history-table .empty-state-cell,
   .statistics-table .empty-state-cell,
   .punches-table .empty-state-cell,
+  .manual-records-table .empty-state-cell,
   .users-table .empty-state-cell,
   .import-history-table tr[data-search-empty="1"] td,
   .statistics-table tr[data-search-empty="1"] td,
   .punches-table tr[data-search-empty="1"] td,
+  .manual-records-table tr[data-search-empty="1"] td,
   .users-table tr[data-search-empty="1"] td {
     display: block;
     padding: 16px 10px;
@@ -1576,10 +1635,12 @@ body.sidebar-open .backdrop {
   .import-history-table .empty-state-cell::before,
   .statistics-table .empty-state-cell::before,
   .punches-table .empty-state-cell::before,
+  .manual-records-table .empty-state-cell::before,
   .users-table .empty-state-cell::before,
   .import-history-table tr[data-search-empty="1"] td::before,
   .statistics-table tr[data-search-empty="1"] td::before,
   .punches-table tr[data-search-empty="1"] td::before,
+  .manual-records-table tr[data-search-empty="1"] td::before,
   .users-table tr[data-search-empty="1"] td::before {
     content: none;
   }
